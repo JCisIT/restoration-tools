@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { CopyResult } from "../../copy-result";
 import { calcAirChanges } from "@/lib/airchange";
 
 const input = "w-full rounded-xs border border-ink-muted bg-transparent px-2 py-2 text-sm";
@@ -69,6 +70,14 @@ export function AirScrubberCalculator() {
             Air scrubber care guide
           </Link>
         </p>
+        <CopyResult
+          lines={[
+            `Air scrubbers for ${Math.round(cubicFeet).toLocaleString()} cu ft at ${num(ach)} air changes per hour`,
+            `Airflow needed: ${Math.ceil(r.cfmNeeded).toLocaleString()} CFM`,
+            `Units: ${r.units} at ${Math.round(effective)} effective CFM each`,
+            `Air changes delivered: ${r.achDelivered ? r.achDelivered.toFixed(1) : "n/a"} per hour`,
+          ]}
+        />
       </aside>
     </div>
   );

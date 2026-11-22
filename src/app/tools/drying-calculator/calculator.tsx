@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CopyResult } from "../../copy-result";
 import {
   calcAirMovers,
   calcDehumidifiers,
@@ -190,6 +191,15 @@ export function DryingCalculator() {
           Initial estimate only, using commonly published industry factors. Not affiliated with or endorsed by any
           standards body.
         </p>
+        <CopyResult
+          lines={[
+            `Drying equipment, Class ${damageClass}, ${type === "lgr" ? "LGR" : type} dehumidifiers`,
+            `Affected volume: ${Math.round(cubicFeet).toLocaleString()} cu ft`,
+            dehu.supported ? `Dehumidification needed: ${Math.ceil(dehu.required).toLocaleString()} ${dehu.unit}` : "Dehumidifier type not recommended for this class",
+            `Dehumidifiers: ${dehu.supported ? dehu.units : "n/a"}`,
+            `Air movers: ${range(moverMin, moverMax)}`,
+          ]}
+        />
       </aside>
     </div>
   );

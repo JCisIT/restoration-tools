@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CopyResult } from "../../copy-result";
 import { calcDemo, type SheetSize, type Thickness } from "@/lib/demo";
 
 const input = "w-full rounded-xs border border-ink-muted bg-transparent px-2 py-2 text-sm";
@@ -112,6 +113,16 @@ export function DemoCalculator() {
         <p className="mt-5 text-xs text-on-dark-muted">
           Wet board weighs much more than dry. Doors, openings and cabinets are not deducted.
         </p>
+        <CopyResult
+          lines={[
+            `Flood cut: ${num(wallLf)} linear ft at ${num(cut)} ft, ${sides === "2" ? "both sides" : "one side"}`,
+            `Drywall removed: ${fmt(r.drywallSf)} sq ft`,
+            `Sheets to hang: ${r.sheets} (${sheet}, ${thickness} in., with waste)`,
+            `Baseboard: ${fmt(r.baseboardLf)} linear ft`,
+            `Insulation: ${fmt(r.insulationSf)} sq ft`,
+            `Drywall debris: about ${fmt(r.debrisLb)} lb dry`,
+          ]}
+        />
       </aside>
     </div>
   );

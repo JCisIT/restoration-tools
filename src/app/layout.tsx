@@ -56,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 results before relying on them.
               </p>
               <p className="no-print mt-2 flex gap-4">
+                <Link href="/about" className="underline">About</Link>
                 <Link href="/privacy" className="underline">Privacy</Link>
                 <Link href="/terms" className="underline">Terms</Link>
               </p>

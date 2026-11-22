@@ -129,7 +129,8 @@ export default function Home() {
           <h2 className="text-2xl">Built by people who do the work</h2>
           <p className="mt-2 text-ink-muted">
             Restoration Tools is made by 9 Construction, a Northern California reconstruction contractor. We built the
-            tools we wanted on our own jobs and made them free for the whole industry.
+            tools we wanted on our own jobs and made them free for the whole industry.{" "}
+            <Link href="/about" className="underline">About this site</Link>
           </p>
         </div>
         {EXPERT_URL && (

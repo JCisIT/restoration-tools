@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ALL_GUIDES.map((g) => g.href),
     ...EQUIPMENT.map((e) => `/equipment/${e.slug}`),
     ...FORMS.map((f) => `/forms/${f.slug}`),
+    "/about",
     "/privacy",
     "/terms",
   ];

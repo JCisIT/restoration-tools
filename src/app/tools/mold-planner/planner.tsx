@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CopyResult } from "../../copy-result";
 import { planMoldJob } from "@/lib/mold";
 
 const input = "w-full rounded-xs border border-ink-muted bg-transparent px-2 py-2 text-sm";
@@ -60,6 +61,17 @@ export function MoldPlanner() {
             <li key={note} className="border-l-2 border-charcoal pl-3">{note}</li>
           ))}
         </ul>
+        <div className="max-w-xs">
+          <CopyResult
+            onDark={false}
+            lines={[
+              `Mold job plan: ${plan.tierLabel}${plan.bumped ? " (planned at full level)" : ""}`,
+              `PPE, ${plan.ppe.level}: ${plan.ppe.items.join("; ")}`,
+              `Containment, ${plan.containment.level}: ${plan.containment.items.join("; ")}`,
+              ...plan.notes,
+            ]}
+          />
+        </div>
       </div>
     </div>
   );

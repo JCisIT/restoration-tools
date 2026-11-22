@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CopyResult } from "../../copy-result";
 import { psychro } from "@/lib/psychro";
 
 interface Row {
@@ -87,6 +88,13 @@ export function PsychroCalculator() {
         <p className="mt-5 text-xs text-on-dark-muted">
           Calculated with the Magnus approximation at sea-level pressure unless an elevation is entered.
         </p>
+        <CopyResult
+          lines={[
+            ...rows.map((r) => `${r.label}: ${r.temp}°F, ${r.rh}% RH, ${fmt(results[r.key]?.gpp)} GPP, dew point ${fmt(results[r.key]?.dewPointF)}°F`),
+            `Affected area above baseline: ${fmt(aboveBaseline)} GPP`,
+            `Dehumidifier grain depression: ${fmt(depression)} GPP`,
+          ]}
+        />
       </aside>
     </div>
   );
