@@ -8,7 +8,9 @@ const tools = [
   { href: "/tools/estimate-compare", name: "Estimate comparison" },
 ];
 
-const comingSoon = ["Supplement request draft", "Photo-to-scope draft"];
+const guides = [{ href: "/equipment", name: "Equipment and care guide" }];
+
+const comingSoon = ["Equipment care log", "Supplement request draft", "Photo-to-scope draft"];
 
 // Third-party tools we point to instead of rebuilding. No affiliation.
 const resources = [
@@ -49,6 +51,23 @@ export function SidebarNav({ expertUrl }: { expertUrl: string | null }) {
               className={`${item} ${active ? "bg-forest" : ""}`}
             >
               {tool.name}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <nav aria-label="Guides" className="flex flex-col gap-1">
+        <span className={label}>Guides</span>
+        {guides.map((guide) => {
+          const active = pathname === guide.href || pathname.startsWith(`${guide.href}/`);
+          return (
+            <Link
+              key={guide.href}
+              href={guide.href}
+              aria-current={active ? "page" : undefined}
+              className={`${item} ${active ? "bg-forest" : ""}`}
+            >
+              {guide.name}
             </Link>
           );
         })}

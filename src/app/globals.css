@@ -38,3 +38,25 @@ h2 {
 .on-dark :focus-visible {
   outline-color: #d88a1a;
 }
+
+/* Printed care checklists: content only, ink-friendly. */
+@media print {
+  aside,
+  details,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  header.bg-forest {
+    background: #ffffff !important;
+    color: #0e0e0e !important;
+    border: 2px solid #0e0e0e;
+  }
+  header.bg-forest p,
+  header.bg-forest svg {
+    color: #0e0e0e !important;
+  }
+}
