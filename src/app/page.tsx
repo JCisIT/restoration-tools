@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EXPERT_URL } from "@/lib/site";
+import { ESTIMATE_READY, EXPERT_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "Restoration Tools | Free tools for the restoration industry" },
@@ -27,16 +27,17 @@ const audiences = [
   },
   {
     who: "Consultants and estimators",
-    what: "Check equipment counts, run the psychrometrics, and compare estimates line by line.",
+    what: "Check equipment counts, run the psychrometrics, and review the drying record.",
     links: [
       { href: "/tools/psychrometric-calculator", label: "GPP and dew point" },
-      { href: "/tools/estimate-compare", label: "Estimate comparison" },
+      { href: "/tools/drying-calculator", label: "Equipment counts" },
     ],
   },
   {
     who: "Project managers",
-    what: "Quantities for the rebuild and forms that document the job from day one.",
+    what: "Track the dry-down, get quantities for the rebuild, and document the job from day one.",
     links: [
+      { href: "/tools/drying-log", label: "Drying log" },
       { href: "/tools/demo-calculator", label: "Demo quantities" },
       { href: "/forms", label: "Job forms" },
     ],
@@ -45,11 +46,14 @@ const audiences = [
 
 const tools = [
   { href: "/tools/drying-calculator", name: "Drying equipment", blurb: "Dehumidifiers and air movers by room and class." },
+  { href: "/tools/drying-log", name: "Daily drying log", blurb: "Readings by room and visit, with dry and stalled flags." },
   { href: "/tools/psychrometric-calculator", name: "GPP and dew point", blurb: "Grains, dew point and dehumidifier performance." },
   { href: "/tools/air-scrubber-calculator", name: "Air scrubbers", blurb: "Units needed by air changes per hour." },
   { href: "/tools/demo-calculator", name: "Flood cut quantities", blurb: "Drywall, sheets, baseboard, insulation, debris." },
   { href: "/tools/equipment-billing", name: "Equipment days", blurb: "Days on site and consumables, ready for the invoice." },
-  { href: "/tools/estimate-compare", name: "Estimate comparison", blurb: "Two estimates side by side, every difference flagged." },
+  ...(ESTIMATE_READY
+    ? [{ href: "/tools/estimate-compare", name: "Estimate comparison", blurb: "Two estimates side by side, every difference flagged." }]
+    : []),
 ];
 
 const guides = [

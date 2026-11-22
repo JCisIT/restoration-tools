@@ -5,51 +5,32 @@ import { usePathname } from "next/navigation";
 
 const tools = [
   { href: "/tools/drying-calculator", name: "Drying calculator" },
+  { href: "/tools/drying-log", name: "Daily drying log" },
   { href: "/tools/psychrometric-calculator", name: "GPP and dew point" },
   { href: "/tools/air-scrubber-calculator", name: "Air scrubber calculator" },
   { href: "/tools/demo-calculator", name: "Flood cut and demo quantities" },
   { href: "/tools/equipment-billing", name: "Equipment days and billing" },
-  { href: "/tools/estimate-compare", name: "Estimate comparison" },
 ];
+const estimateTool = { href: "/tools/estimate-compare", name: "Estimate comparison" };
 
 const guides = [
   { href: "/equipment", name: "Equipment and care guide" },
   { href: "/guides/water-category-class", name: "Water category and class" },
   { href: "/forms", name: "Printable job forms" },
-];
-
-const comingSoon = ["Equipment care log", "Supplement request draft", "Photo-to-scope draft"];
-
-// Third-party tools we point to instead of rebuilding. No affiliation.
-const resources = [
-  {
-    href: "https://www.verisk.com/resources/campaigns/pdf-to-esx-conversions-with-xactrestore-pro/",
-    name: "PDF to ESX conversion",
-    source: "Verisk",
-  },
-  {
-    href: "https://iicrc.org/wp-content/uploads/2024/04/US-Imperial-Initial-Dehumidification-Recommendation-Factors-and-Formulas.pdf",
-    name: "Dehumidification worksheet",
-    source: "IICRC",
-  },
-  {
-    href: "https://iicrc.org/wp-content/uploads/2024/04/US-Imperial-Airmover-and-Gallons-Calculations-Worksheet-7.1.22.pdf",
-    name: "Air mover worksheet",
-    source: "IICRC",
-  },
+  { href: "/resources", name: "Outside resources" },
 ];
 
 const label = "pb-1.5 font-head text-xs font-semibold uppercase tracking-[0.26em] text-on-dark-muted";
 const item = "block rounded-xs px-3 py-2.5 text-bone hover:bg-forest";
 
-export function SidebarNav({ expertUrl }: { expertUrl: string | null }) {
+export function SidebarNav({ expertUrl, estimateReady }: { expertUrl: string | null; estimateReady: boolean }) {
   const pathname = usePathname();
 
   return (
     <div className="flex flex-col gap-7">
       <nav aria-label="Tools" className="flex flex-col gap-1">
         <span className={label}>Tools</span>
-        {tools.map((tool) => {
+        {(estimateReady ? [...tools, estimateTool] : tools).map((tool) => {
           const active = pathname === tool.href;
           return (
             <Link
@@ -81,24 +62,12 @@ export function SidebarNav({ expertUrl }: { expertUrl: string | null }) {
         })}
       </nav>
 
-      <div className="flex flex-col gap-1">
-        <span className={label}>Coming soon</span>
-        {comingSoon.map((name) => (
-          <span key={name} className="px-3 py-2.5 text-on-dark-muted">
-            {name}
-          </span>
-        ))}
-      </div>
-
-      <nav aria-label="Resources from other providers" className="flex flex-col gap-1">
-        <span className={label}>Resources</span>
-        {resources.map((r) => (
-          <a key={r.href} href={r.href} target="_blank" rel="noopener noreferrer" className={item}>
-            {r.name}
-            <span className="block text-xs text-on-dark-muted">{r.source} · opens in a new tab</span>
-          </a>
-        ))}
-      </nav>
+      {!estimateReady && (
+        <div className="flex flex-col gap-1">
+          <span className={label}>Coming soon</span>
+          <span className="px-3 py-2.5 text-on-dark-muted">{estimateTool.name}</span>
+        </div>
+      )}
 
       {expertUrl && (
         <a

@@ -1,9 +1,9 @@
-// Initial drying equipment estimates based on the commonly published
-// simple-method factors from the water damage restoration standard.
+// Initial drying equipment estimates using the simple-method factors.
 //
-// TODO(verify before launch): confirm DEHU_FACTORS against the current IICRC
-// "Initial Dehumidification Recommendation Factors and Formulas" worksheet.
+// DEHU_FACTORS match the IICRC "Initial Dehumidification Recommendation
+// Factors and Formulas" worksheet (US imperial) as reported in November 2026.
 // The air mover ranges were cross-checked against published summaries.
+// These give a minimum starting point; adjust from daily readings.
 
 export type DamageClass = 1 | 2 | 3 | 4;
 export type DehuType = "lgr" | "conventional" | "desiccant";
@@ -13,7 +13,7 @@ export type DehuType = "lgr" | "conventional" | "desiccant";
 export const DEHU_FACTORS: Record<DehuType, Record<DamageClass, number | null>> = {
   conventional: { 1: 100, 2: 40, 3: 30, 4: null },
   lgr: { 1: 100, 2: 50, 3: 40, 4: 40 },
-  desiccant: { 1: 1, 2: 2, 3: 3, 4: 2 },
+  desiccant: { 1: 1, 2: 2, 3: 3, 4: 3 },
 };
 
 export const AIR_MOVER_RULES = {

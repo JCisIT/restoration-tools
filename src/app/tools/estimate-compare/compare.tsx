@@ -52,13 +52,22 @@ export function EstimateCompare() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const tooBig = ["a", "b"].some((k) => {
+      const f = data.get(k);
+      return f instanceof File && f.size > 2 * 1024 * 1024;
+    });
+    setResult(null);
+    if (tooBig) {
+      setError("Each PDF must be under 2 MB. Try exporting the estimate without photos.");
+      return;
+    }
     setBusy(true);
     setError(null);
-    setResult(null);
     try {
       const response = await fetch("/api/estimate-compare", {
         method: "POST",
-        body: new FormData(event.currentTarget),
+        body: data,
       });
       const body = await response.json().catch(() => null);
       if (!response.ok) {

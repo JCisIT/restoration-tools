@@ -1,10 +1,12 @@
 import { Anthropic, ModelDeclinedError, ModelOutputError, extractEstimate, matchLineItems } from "@/lib/claude";
 import { buildComparison } from "@/lib/estimate";
+import { ESTIMATE_READY } from "@/lib/site";
 import { logRun, overDailyLimit, visitorHash } from "@/lib/usage";
 
 export const maxDuration = 300;
 
-const MAX_BYTES = 10 * 1024 * 1024;
+// Two files must fit inside the host's 4.5 MB request limit.
+const MAX_BYTES = 2 * 1024 * 1024;
 
 function fail(status: number, error: string) {
   return Response.json({ error }, { status });
@@ -19,7 +21,7 @@ async function readPdf(value: FormDataEntryValue | null): Promise<string | null>
 }
 
 export async function POST(request: Request) {
-  if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN) {
+  if (!ESTIMATE_READY) {
     return fail(503, "The service is not configured yet.");
   }
   let form: FormData;
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
     return fail(400, "Send two PDF files as form data.");
   }
   const [a, b] = await Promise.all([readPdf(form.get("a")), readPdf(form.get("b"))]);
-  if (!a || !b) return fail(400, "Upload two PDF estimates, each under 10 MB.");
+  if (!a || !b) return fail(400, "Upload two PDF estimates, each under 2 MB.");
 
   const visitor = visitorHash(request);
   try {
