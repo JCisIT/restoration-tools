@@ -24,6 +24,7 @@ export const TOOL = {
 export const GUIDE = {
   equipment: t("/equipment", "Equipment and care guide", "Scrubbers, filters, containment, PPE, dehus, meters."),
   water: t("/guides/water-category-class", "Water category and class", "What they mean and how to call them."),
+  fire: t("/guides/fire-and-smoke", "Fire and smoke guide", "Residue types, cleaning order, ozone and hydroxyl."),
   forms: t("/forms", "Printable job forms", "Moisture log, equipment checklist, pressure log."),
   resources: t("/resources", "Outside resources", "Good tools from other providers."),
 };
@@ -35,7 +36,7 @@ export const TOOL_GROUPS: { label: string; items: Entry[] }[] = [
 ];
 
 export const ALL_TOOLS: Entry[] = TOOL_GROUPS.flatMap((g) => g.items);
-export const ALL_GUIDES: Entry[] = [GUIDE.equipment, GUIDE.water, GUIDE.forms, GUIDE.resources];
+export const ALL_GUIDES: Entry[] = [GUIDE.equipment, GUIDE.water, GUIDE.fire, GUIDE.forms, GUIDE.resources];
 
 const step = (e: Entry, note: string) => ({ href: e.href, label: e.name, note });
 
@@ -77,6 +78,11 @@ export const NEXT: Record<string, { href: string; label: string; note: string }[
     step(TOOL.log, "Back up equipment days with the drying record."),
   ],
   "/tools/unit-converter": [step(TOOL.gpp, "Grains and dew point from temperature and RH."), step(TOOL.scrubber, "Airflow and air changes.")],
+  "/guides/fire-and-smoke": [
+    step(TOOL.scrubber, "Size air scrubbers for the work area."),
+    { href: "/equipment/filters", label: "Filter guide", note: "Carbon handles odor; HEPA does not." },
+    { href: "/equipment/ppe", label: "PPE and respirators", note: "Fit testing and what each level covers." },
+  ],
   "/guides/water-category-class": [
     step(TOOL.drying, "Size equipment by class."),
     { href: "/equipment/ppe", label: "PPE and respirators", note: "What to wear for Category 3." },
@@ -91,7 +97,7 @@ export const EQUIPMENT_NEXT: Record<string, { href: string; label: string; note:
   containment: [step(TOOL.mold, "Which containment level the job calls for."), step(TOOL.scrubber, "Size the negative air."), { href: "/forms/containment-log", label: "Containment pressure log", note: "Your proof it stayed negative." }],
   ppe: [step(TOOL.mold, "PPE level from the size of the job."), step(GUIDE.water, "Category drives the precautions.")],
   "vacuum-saws": [step(TOOL.demo, "Flood-cut quantities and sheets to hang.")],
-  "hepa-vacuums": [step(TOOL.mold, "Plan the mold job around the cleanup.")],
+  "hepa-vacuums": [step(TOOL.mold, "Plan the mold job around the cleanup."), step(GUIDE.fire, "Dry soot comes off with a HEPA vacuum first.")],
   dehumidifiers: [step(TOOL.drying, "How many units to set."), step(TOOL.gpp, "Check grain depression.")],
   "air-movers": [step(TOOL.drying, "Air mover counts by room."), step(TOOL.billing, "Tally equipment days.")],
   meters: [step(TOOL.log, "Log readings by spot and visit."), { href: "/forms/moisture-log", label: "Paper moisture log", note: "A blank form for the truck." }],

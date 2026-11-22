@@ -10,7 +10,7 @@ Live at https://restorationtools.org. Built and run by 9 Construction Inc.
 | Drying | Drying calculator, daily drying log, GPP and dew point |
 | Mold and air | Mold job planner, air scrubber calculator |
 | Job math | Flood cut and demo quantities, equipment days and billing, unit converter |
-| Guides | Equipment and care guide (9 guides), water category and class, printable forms, outside resources |
+| Guides | Equipment and care guide (9 guides), water category and class, fire and smoke, printable forms, outside resources |
 | Gated | Estimate comparison (PDF upload, AI). Hidden until its keys are set. |
 
 ## How it's built

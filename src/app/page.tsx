@@ -47,7 +47,7 @@ const audiences = [
 ];
 
 const tools = [...ALL_TOOLS, ...(ESTIMATE_READY ? [TOOL.estimate] : [])];
-const guides = [GUIDE.equipment, GUIDE.water, GUIDE.forms];
+const guides = [GUIDE.equipment, GUIDE.water, GUIDE.fire, GUIDE.forms];
 
 const label = "font-head text-xs font-semibold uppercase tracking-[0.26em]";
 
@@ -112,7 +112,7 @@ export default function Home() {
       <section aria-labelledby="guides-h" className="on-dark -mx-4 bg-forest px-4 py-12 text-bone md:-mx-12 md:px-12">
         <p className={`${label} text-on-dark-muted`}>Guides and forms</p>
         <h2 id="guides-h" className="mt-2 text-3xl">Know the gear. Document the job.</h2>
-        <ul className="mt-6 grid gap-px bg-olive md:grid-cols-3">
+        <ul className="mt-6 grid gap-px bg-olive sm:grid-cols-2 xl:grid-cols-4">
           {guides.map((g) => (
             <li key={g.href} className="bg-forest">
               <Link href={g.href} className="flex h-full flex-col gap-2 p-5 hover:bg-charcoal">
