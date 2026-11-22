@@ -38,7 +38,7 @@ const newRoom = (id: number): Room => ({
 const DEFAULT_CAPACITY: Record<DehuType, string> = { lgr: "130", conventional: "70", desiccant: "600" };
 
 const input =
-  "w-full rounded border border-black/20 bg-transparent px-2 py-1.5 text-sm dark:border-white/25";
+  "w-full rounded-xs border border-ink-muted bg-transparent px-2 py-1.5 text-sm";
 
 export function DryingCalculator() {
   const [rooms, setRooms] = useState<Room[]>([newRoom(1)]);
@@ -101,7 +101,7 @@ export function DryingCalculator() {
         </section>
 
         {rooms.map((room, i) => (
-          <section key={room.id} className="rounded-lg border border-black/10 p-4 dark:border-white/15">
+          <section key={room.id} className="border border-olive p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
               <input
                 className={`${input} max-w-xs font-medium`}
@@ -112,7 +112,7 @@ export function DryingCalculator() {
               {rooms.length > 1 && (
                 <button
                   type="button"
-                  className="text-sm underline opacity-70 hover:opacity-100"
+                  className="text-sm underline text-ink-muted"
                   onClick={() => setRooms((rs) => rs.filter((r) => r.id !== room.id))}
                 >
                   Remove
@@ -131,7 +131,7 @@ export function DryingCalculator() {
                 ] as const
               ).map(([key, label]) => (
                 <label key={key} className="text-xs">
-                  <span className="mb-1 block opacity-80">{label}</span>
+                  <span className="mb-1 block text-ink-muted">{label}</span>
                   <input
                     className={input}
                     inputMode="decimal"
@@ -149,7 +149,7 @@ export function DryingCalculator() {
 
         <button
           type="button"
-          className="rounded border border-black/20 px-3 py-1.5 text-sm hover:border-black/50 dark:border-white/25 dark:hover:border-white/60"
+          className="rounded-xs border border-ink-muted px-3 py-1.5 text-sm hover:border-charcoal"
           onClick={() => {
             setRooms((rs) => [...rs, newRoom(nextId)]);
             setNextId((n) => n + 1);
@@ -159,34 +159,34 @@ export function DryingCalculator() {
         </button>
       </div>
 
-      <aside className="h-fit rounded-lg border border-black/10 p-5 dark:border-white/15">
-        <h2 className="font-medium">Initial equipment</h2>
+      <aside className="on-dark h-fit bg-forest p-6 text-bone">
+        <h2 className="text-xs tracking-[0.26em]">Initial equipment</h2>
         <dl className="mt-4 space-y-4 text-sm">
           <div>
-            <dt className="opacity-70">Affected volume</dt>
+            <dt className="text-on-dark-muted">Affected volume</dt>
             <dd className="text-lg font-semibold">{Math.round(cubicFeet).toLocaleString()} cu ft</dd>
           </div>
           <div>
-            <dt className="opacity-70">Dehumidification needed</dt>
+            <dt className="text-on-dark-muted">Dehumidification needed</dt>
             <dd className="text-lg font-semibold">
               {dehu.supported ? `${Math.ceil(dehu.required).toLocaleString()} ${dehu.unit}` : "Not recommended"}
             </dd>
             {!dehu.supported && (
-              <p className="mt-1 text-xs opacity-70">
+              <p className="mt-1 text-xs text-on-dark-muted">
                 Conventional refrigerant units are not recommended for Class 4. Choose LGR or desiccant.
               </p>
             )}
           </div>
           <div>
-            <dt className="opacity-70">Dehumidifiers</dt>
+            <dt className="text-on-dark-muted">Dehumidifiers</dt>
             <dd className="text-lg font-semibold">{dehu.supported ? dehu.units : "—"}</dd>
           </div>
           <div>
-            <dt className="opacity-70">Air movers</dt>
+            <dt className="text-on-dark-muted">Air movers</dt>
             <dd className="text-lg font-semibold">{range(moverMin, moverMax)}</dd>
           </div>
         </dl>
-        <p className="mt-5 text-xs opacity-70">
+        <p className="mt-5 text-xs text-on-dark-muted">
           Initial estimate only, using commonly published industry factors. Not affiliated with or endorsed by any
           standards body.
         </p>

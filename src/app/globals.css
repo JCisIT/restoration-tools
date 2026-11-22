@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* 9 Construction brand tokens. Orange is the single accent: one per view. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-charcoal: #0e0e0e;
+  --color-olive: #5a6b46;
+  --color-forest: #2e3a28;
+  --color-bone: #e6e1d6;
+  --color-orange: #d88a1a;
+  --color-ink-muted: #4a4f44;
+  --color-on-dark-muted: #a9a496;
+  --color-background: #ffffff;
+  --color-foreground: #0e0e0e;
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+  --font-head: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #0e0e0e;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Brand headings: Oswald SemiBold, uppercase, lightly tracked. */
+h1,
+h2 {
+  font-family: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+:focus-visible {
+  outline: 2px solid #0e0e0e;
+  outline-offset: 2px;
+}
+
+.on-dark :focus-visible {
+  outline-color: #d88a1a;
 }

@@ -26,11 +26,11 @@ const LABEL: Record<DiffRow["kind"], string> = {
 };
 
 function Line({ item }: { item: LineItem | null }) {
-  if (!item) return <span className="opacity-40">—</span>;
+  if (!item) return <span className="text-ink-muted">—</span>;
   return (
     <div>
       <div>{item.description}</div>
-      <div className="text-xs opacity-70">
+      <div className="text-xs text-ink-muted">
         {[
           item.area,
           item.quantity != null ? `${item.quantity} ${item.unit ?? ""}`.trim() : null,
@@ -90,15 +90,15 @@ export function EstimateCompare() {
         <button
           type="submit"
           disabled={busy}
-          className="rounded bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+          className="rounded-xs bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
         >
           {busy ? "Comparing…" : "Compare"}
         </button>
       </form>
 
-      {busy && <p className="mt-4 text-sm opacity-70">Reading both estimates. Long estimates can take a few minutes.</p>}
+      {busy && <p className="mt-4 text-sm text-ink-muted">Reading both estimates. Long estimates can take a few minutes.</p>}
       {error && (
-        <p role="alert" className="mt-4 rounded border border-red-500/50 p-3 text-sm text-red-700 dark:text-red-400">
+        <p role="alert" className="mt-4 rounded-xs border border-red-500/50 p-3 text-sm text-red-700">
           {error}
         </p>
       )}
@@ -112,20 +112,20 @@ export function EstimateCompare() {
               ["Different amounts (net)", result.comparison.changedDelta],
               ["Line item difference", result.comparison.lineItemDelta],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-lg border border-black/10 p-4 dark:border-white/15">
-                <dt className="text-xs opacity-70">{label}</dt>
+              <div key={label} className="border border-olive p-4">
+                <dt className="text-xs text-ink-muted">{label}</dt>
                 <dd className="mt-1 text-lg font-semibold">{money(value as number)}</dd>
               </div>
             ))}
           </dl>
 
-          <p className="text-sm opacity-80">
+          <p className="text-sm text-ink-muted">
             Stated replacement cost: yours {money(result.a.totals.replacement_cost_value)}, theirs{" "}
             {money(result.b.totals.replacement_cost_value)}. Line item figures exclude overhead, profit, and tax.
           </p>
 
           {notes.length > 0 && (
-            <ul className="list-disc space-y-1 rounded border border-amber-500/50 p-3 pl-7 text-sm">
+            <ul className="list-disc space-y-1 rounded-xs border border-amber-500/50 p-3 pl-7 text-sm">
               {notes.map((n) => (
                 <li key={n}>{n}</li>
               ))}
@@ -140,7 +140,7 @@ export function EstimateCompare() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-black/20 text-xs uppercase opacity-70 dark:border-white/25">
+                <tr className="border-b border-ink-muted text-xs uppercase text-ink-muted">
                   <th className="py-2 pr-3 font-medium">Status</th>
                   <th className="py-2 pr-3 font-medium">Yours</th>
                   <th className="py-2 pr-3 text-right font-medium">Total</th>
@@ -151,7 +151,7 @@ export function EstimateCompare() {
               </thead>
               <tbody>
                 {rows.map((row, i) => (
-                  <tr key={i} className="border-b border-black/10 align-top dark:border-white/10">
+                  <tr key={i} className="border-b border-olive align-top">
                     <td className="py-2 pr-3 whitespace-nowrap">{LABEL[row.kind]}</td>
                     <td className="py-2 pr-3"><Line item={row.a} /></td>
                     <td className="py-2 pr-3 text-right tabular-nums">{money(row.a?.total)}</td>
@@ -162,10 +162,10 @@ export function EstimateCompare() {
                 ))}
               </tbody>
             </table>
-            {rows.length === 0 && <p className="py-4 text-sm opacity-70">No differences found.</p>}
+            {rows.length === 0 && <p className="py-4 text-sm text-ink-muted">No differences found.</p>}
           </div>
 
-          <p className="text-xs opacity-70">
+          <p className="text-xs text-ink-muted">
             Automated comparison of two documents. Check every line against the source PDFs before sending anything
             to a carrier or customer. This tool does not interpret insurance coverage.
           </p>
