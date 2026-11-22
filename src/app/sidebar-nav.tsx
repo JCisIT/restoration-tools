@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 
 const tools = [
   { href: "/tools/drying-calculator", name: "Drying calculator", alsoActiveOn: "/" },
+  { href: "/tools/psychrometric-calculator", name: "GPP and dew point" },
+  { href: "/tools/air-scrubber-calculator", name: "Air scrubber calculator" },
   { href: "/tools/estimate-compare", name: "Estimate comparison" },
 ];
 
