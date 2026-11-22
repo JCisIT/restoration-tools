@@ -5,17 +5,21 @@ import {
   EMPTY_JOB,
   STATUS_LABEL,
   history,
-  parseJob,
+  jobLabel,
+  newStore,
+  parseStore,
   pointStatus,
   summary,
   type DryingJob,
   type Point,
   type Status,
+  type Store,
   type Visit,
 } from "@/lib/dryinglog";
 import { psychro } from "@/lib/psychro";
 
-const KEY = "rt-drying-log-v1";
+const KEY = "rt-drying-log-v2";
+const LEGACY_KEY = "rt-drying-log-v1"; // single-job version, carried over once
 
 const input = "w-full min-w-0 rounded-xs border border-ink-muted bg-transparent px-2 py-1.5 text-sm";
 const toNum = (s: string): number | null => {
@@ -32,25 +36,36 @@ const CHIP: Record<Status, string> = {
   stalled: "bg-charcoal text-bone",
 };
 
-function load(): DryingJob {
+function load(): Store {
   try {
-    return parseJob(window.localStorage.getItem(KEY));
+    return parseStore(window.localStorage.getItem(KEY), window.localStorage.getItem(LEGACY_KEY));
   } catch {
-    return EMPTY_JOB; // storage blocked: work without saving
+    return newStore(); // storage blocked: work without saving
   }
 }
 
 export function DryingLog() {
-  const [job, setJob] = useState<DryingJob>(load);
+  const [store, setStore] = useState<Store>(load);
   const [saveFailed, setSaveFailed] = useState(false);
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(KEY, JSON.stringify(job));
+      window.localStorage.setItem(KEY, JSON.stringify(store));
     } catch {
       queueMicrotask(() => setSaveFailed(true));
     }
-  }, [job]);
+  }, [store]);
+
+  const job = (store.jobs.find((e) => e.id === store.activeId) ?? store.jobs[0]).job;
+  const setJob = (fn: (j: DryingJob) => DryingJob) =>
+    setStore((s) => ({ ...s, jobs: s.jobs.map((e) => (e.id === s.activeId ? { ...e, job: fn(e.job) } : e)) }));
+  const newJob = () =>
+    setStore((s) => ({
+      ...s,
+      jobs: [...s.jobs, { id: s.nextJobId, job: EMPTY_JOB }],
+      activeId: s.nextJobId,
+      nextJobId: s.nextJobId + 1,
+    }));
 
   const visits = [...job.visits].sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
   const counts = summary(job);
@@ -75,8 +90,13 @@ export function DryingLog() {
     const date = new Date().toLocaleDateString("en-CA"); // local yyyy-mm-dd
     setJob((j) => ({ ...j, nextId: j.nextId + 1, visits: [...j.visits, { id: j.nextId, date, tempF: null, rh: null, readings: {} }] }));
   };
-  const clear = () => {
-    if (window.confirm("Clear this job and all its readings from this device?")) setJob(EMPTY_JOB);
+  const deleteJob = () => {
+    if (!window.confirm("Delete this job and all its readings from this device?")) return;
+    setStore((s) => {
+      const jobs = s.jobs.filter((e) => e.id !== s.activeId);
+      if (jobs.length === 0) return { ...newStore(), jobs: [{ id: s.nextJobId, job: EMPTY_JOB }], activeId: s.nextJobId, nextJobId: s.nextJobId + 1 };
+      return { ...s, jobs, activeId: jobs[jobs.length - 1].id };
+    });
   };
 
   function downloadCsv() {
@@ -109,6 +129,19 @@ export function DryingLog() {
           This browser is blocking storage, so the log will not be saved when you leave. Download the CSV before closing.
         </p>
       )}
+
+      <div className="no-print flex flex-wrap items-end gap-3">
+        <label className="min-w-48 flex-1 text-xs sm:max-w-sm">
+          <span className="mb-1 block text-ink-muted">Job</span>
+          <select className={input} value={store.activeId} onChange={(e) => setStore((s) => ({ ...s, activeId: Number(e.target.value) }))}>
+            {store.jobs.map((e, i) => (
+              <option key={e.id} value={e.id}>{jobLabel(e, i)}</option>
+            ))}
+          </select>
+        </label>
+        <button type="button" onClick={newJob} className="rounded-xs border border-ink-muted px-4 py-2 text-sm hover:border-charcoal">New job</button>
+        <span className="text-xs text-ink-muted">{store.jobs.length} saved on this device</span>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="text-xs">
@@ -209,7 +242,7 @@ export function DryingLog() {
         <button type="button" onClick={addVisit} disabled={empty} className="rounded-xs bg-charcoal px-4 py-2.5 text-sm font-semibold text-bone hover:bg-forest disabled:opacity-40">Add a visit</button>
         <button type="button" onClick={() => window.print()} disabled={empty} className="rounded-xs border border-ink-muted px-4 py-2.5 text-sm hover:border-charcoal disabled:opacity-40">Print report</button>
         <button type="button" onClick={downloadCsv} disabled={empty} className="rounded-xs border border-ink-muted px-4 py-2.5 text-sm hover:border-charcoal disabled:opacity-40">Download CSV</button>
-        <button type="button" onClick={clear} disabled={empty && !job.name && !job.meter} className="ml-auto rounded-xs px-4 py-2.5 text-sm underline disabled:opacity-40">Clear job</button>
+        <button type="button" onClick={deleteJob} className="ml-auto rounded-xs px-4 py-2.5 text-sm underline">Delete this job</button>
       </div>
 
       <p className="text-xs text-ink-muted">

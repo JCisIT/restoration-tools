@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 
 export const metadata: Metadata = {
   title: "Water damage category and class explained",
@@ -111,15 +112,6 @@ export default function Page() {
         </ol>
       </section>
 
-      <section className="flex flex-wrap gap-3">
-        <Link href="/tools/drying-calculator" className="rounded-xs border-2 border-charcoal px-4 py-2.5 text-sm font-semibold hover:bg-bone">
-          Size equipment by class
-        </Link>
-        <Link href="/equipment/ppe" className="rounded-xs border-2 border-charcoal px-4 py-2.5 text-sm font-semibold hover:bg-bone">
-          PPE for Category 3
-        </Link>
-      </section>
-
       <section className="border-t border-olive pt-6 text-sm">
         <h2 className="text-lg">Sources</h2>
         <ul className="mt-2 space-y-1">
@@ -131,6 +123,7 @@ export default function Page() {
         </ul>
         <p className="mt-3 text-xs text-ink-muted">Plain-language summary. The ANSI/IICRC S500 standard is the authority; it is not quoted here.</p>
       </section>
+      <NextSteps steps={NEXT["/guides/water-category-class"]} />
     </div>
   );
 }

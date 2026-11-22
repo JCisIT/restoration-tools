@@ -4,8 +4,10 @@ import { calcAirChanges } from "../src/lib/airchange";
 import { daysOnSite, equipmentDays } from "../src/lib/billing";
 import { calcDemo } from "../src/lib/demo";
 import { calcAirMovers, calcDehumidifiers, DEHU_FACTORS } from "../src/lib/drying";
-import { EMPTY_JOB, parseJob, pointStatus, summary, type DryingJob } from "../src/lib/dryinglog";
+import { convert, GROUPS } from "../src/lib/convert";
+import { EMPTY_JOB, parseJob, parseStore, pointStatus, summary, type DryingJob } from "../src/lib/dryinglog";
 import { buildComparison, type Estimate } from "../src/lib/estimate";
+import { planMoldJob, sizeTier } from "../src/lib/mold";
 import { psychro } from "../src/lib/psychro";
 
 test("dehumidifier factors match the IICRC worksheet", () => {
@@ -97,4 +99,39 @@ test("saved drying logs that are malformed start fresh", () => {
   assert.equal(parseJob("{not json"), EMPTY_JOB);
   assert.equal(parseJob('{"version":2}'), EMPTY_JOB);
   assert.equal(parseJob('{"version":1,"name":"A","points":[],"visits":[],"nextId":4}').nextId, 4);
+});
+
+test("drying log store: migration and bad data", () => {
+  const legacy = '{"version":1,"name":"Old job","points":[],"visits":[],"nextId":3}';
+  const migrated = parseStore(null, legacy);
+  assert.equal(migrated.jobs.length, 1);
+  assert.equal(migrated.jobs[0].job.name, "Old job");
+  assert.equal(parseStore("{bad", null).jobs.length, 1);
+  const s = parseStore('{"version":2,"jobs":[{"id":4,"job":{"version":1,"name":"A","points":[],"visits":[],"nextId":1}}],"activeId":99,"nextJobId":2}');
+  assert.equal(s.activeId, 4); // unknown active id falls back to a real job
+  assert.equal(s.nextJobId, 5); // never reuses an id
+});
+
+test("mold job tiers", () => {
+  assert.equal(sizeTier(9.9), "small");
+  assert.equal(sizeTier(10), "medium");
+  assert.equal(sizeTier(100), "medium");
+  assert.equal(sizeTier(101), "large");
+  assert.equal(planMoldJob({ areaSqFt: 5, heavyOrSpreadRisk: false, hvacInvolved: false }).ppe.level, "Minimum");
+  assert.equal(planMoldJob({ areaSqFt: 50, heavyOrSpreadRisk: false, hvacInvolved: false }).containment.level, "Limited");
+  const bumped = planMoldJob({ areaSqFt: 5, heavyOrSpreadRisk: true, hvacInvolved: true });
+  assert.equal(bumped.containment.level, "Full");
+  assert.equal(bumped.bumped, true);
+  assert.ok(bumped.notes.some((n) => n.includes("HVAC")));
+});
+
+test("unit conversions", () => {
+  const g = (k: string) => GROUPS.find((x) => x.key === k)!;
+  assert.ok(Math.abs(convert(g("pressure"), "inwc", "pa", 0.02)! - 4.98) < 0.01);
+  assert.equal(convert(g("temperature"), "f", "c", 212), 100);
+  assert.equal(convert(g("temperature"), "c", "f", 0), 32);
+  assert.equal(convert(g("volume"), "gpd", "ppd", 1), 8);
+  assert.ok(Math.abs(convert(g("area"), "sqm", "sqft", 1)! - 10.764) < 0.001);
+  assert.equal(convert(g("moisture"), "gkg", "gpp", 10), 70);
+  assert.equal(convert(g("pressure"), "pa", "nope", 1), null);
 });

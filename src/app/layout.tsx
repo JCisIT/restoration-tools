@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Big_Shoulders_Stencil, Inter, Oswald } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ESTIMATE_READY, EXPERT_URL } from "@/lib/site";
+import { MobileMenu } from "./mobile-menu";
 import { SidebarNav } from "./sidebar-nav";
 import "./globals.css";
 
@@ -35,15 +36,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${inter.variable} ${oswald.variable} ${stencil.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col md:flex-row">
         {/* Phone: brand bar with a collapsible menu. */}
-        <details className="on-dark bg-charcoal md:hidden">
-          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3">
-            <Brand />
-            <span className="rounded-xs border border-on-dark-muted px-3 py-2 text-sm text-bone">Menu</span>
-          </summary>
-          <div className="px-4 pb-6 pt-2">
-            <SidebarNav expertUrl={EXPERT_URL} estimateReady={ESTIMATE_READY} />
-          </div>
-        </details>
+        <MobileMenu brand={<Brand />}>
+          <SidebarNav expertUrl={EXPERT_URL} estimateReady={ESTIMATE_READY} />
+        </MobileMenu>
 
         {/* Desktop: fixed-width sidebar. */}
         <aside className="on-dark hidden w-72 shrink-0 flex-col gap-7 bg-charcoal px-6 py-7 md:flex">

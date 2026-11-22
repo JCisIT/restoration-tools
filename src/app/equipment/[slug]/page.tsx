@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CADENCES, EQUIPMENT, getEquipment } from "@/lib/equipment";
+import { EQUIPMENT_NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { EquipmentIcon } from "../equipment-icon";
 import { PrintButton } from "../../print-button";
 
@@ -106,6 +108,8 @@ export default async function EquipmentPage(props: PageProps<"/equipment/[slug]"
           </ul>
         </section>
       </div>
+
+      <NextSteps steps={EQUIPMENT_NEXT[item.slug] ?? []} title="Tools for this equipment" />
 
       <section aria-labelledby="sources" className="border-t border-olive pt-6">
         <h2 id="sources" className="text-lg">

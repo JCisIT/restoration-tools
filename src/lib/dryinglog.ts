@@ -78,3 +78,50 @@ export function parseJob(raw: string | null): DryingJob {
     return EMPTY_JOB;
   }
 }
+
+// Several jobs, one active at a time.
+export interface JobEntry {
+  id: number;
+  job: DryingJob;
+}
+
+export interface Store {
+  version: 2;
+  jobs: JobEntry[];
+  activeId: number;
+  nextJobId: number;
+}
+
+export const newStore = (first: DryingJob = EMPTY_JOB): Store => ({
+  version: 2,
+  jobs: [{ id: 1, job: first }],
+  activeId: 1,
+  nextJobId: 2,
+});
+
+// Loads the multi-job store. A log saved by the earlier single-job version
+// (legacyRaw) is carried over as the first job.
+export function parseStore(raw: string | null, legacyRaw: string | null = null): Store {
+  if (raw) {
+    try {
+      const s = JSON.parse(raw);
+      if (s?.version === 2 && Array.isArray(s.jobs) && s.jobs.length > 0) {
+        const jobs: JobEntry[] = s.jobs
+          .filter((e: JobEntry) => Number.isFinite(e?.id) && e?.job)
+          .map((e: JobEntry) => ({ id: e.id, job: parseJob(JSON.stringify(e.job)) }));
+        if (jobs.length > 0) {
+          const activeId = jobs.some((e) => e.id === s.activeId) ? s.activeId : jobs[0].id;
+          const maxId = Math.max(...jobs.map((e) => e.id));
+          return { version: 2, jobs, activeId, nextJobId: Math.max(Number(s.nextJobId) || 0, maxId + 1) };
+        }
+      }
+    } catch {
+      // fall through to a fresh store
+    }
+  }
+  return newStore(parseJob(legacyRaw));
+}
+
+export function jobLabel(entry: JobEntry, index: number): string {
+  return entry.job.name.trim() || `Untitled job ${index + 1}`;
+}

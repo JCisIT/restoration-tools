@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ALL_TOOLS, GUIDE, TOOL } from "@/lib/links";
 import { ESTIMATE_READY, EXPERT_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ const audiences = [
     links: [
       { href: "/guides/water-category-class", label: "Category and class" },
       { href: "/equipment/ppe", label: "PPE basics" },
+      { href: "/tools/mold-planner", label: "Mold job planner" },
     ],
   },
   {
@@ -44,23 +46,8 @@ const audiences = [
   },
 ];
 
-const tools = [
-  { href: "/tools/drying-calculator", name: "Drying equipment", blurb: "Dehumidifiers and air movers by room and class." },
-  { href: "/tools/drying-log", name: "Daily drying log", blurb: "Readings by room and visit, with dry and stalled flags." },
-  { href: "/tools/psychrometric-calculator", name: "GPP and dew point", blurb: "Grains, dew point and dehumidifier performance." },
-  { href: "/tools/air-scrubber-calculator", name: "Air scrubbers", blurb: "Units needed by air changes per hour." },
-  { href: "/tools/demo-calculator", name: "Flood cut quantities", blurb: "Drywall, sheets, baseboard, insulation, debris." },
-  { href: "/tools/equipment-billing", name: "Equipment days", blurb: "Days on site and consumables, ready for the invoice." },
-  ...(ESTIMATE_READY
-    ? [{ href: "/tools/estimate-compare", name: "Estimate comparison", blurb: "Two estimates side by side, every difference flagged." }]
-    : []),
-];
-
-const guides = [
-  { href: "/equipment", name: "Equipment and care guide", blurb: "Scrubbers, filters, containment, PPE, dehus, meters." },
-  { href: "/guides/water-category-class", name: "Water category and class", blurb: "What they mean and how to call them." },
-  { href: "/forms", name: "Printable job forms", blurb: "Moisture log, equipment checklist, pressure log." },
-];
+const tools = [...ALL_TOOLS, ...(ESTIMATE_READY ? [TOOL.estimate] : [])];
+const guides = [GUIDE.equipment, GUIDE.water, GUIDE.forms];
 
 const label = "font-head text-xs font-semibold uppercase tracking-[0.26em]";
 

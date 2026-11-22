@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { DryingCalculator } from "./calculator";
 
 export const metadata: Metadata = {
@@ -15,6 +17,7 @@ export default function Page() {
         psychrometric readings.
       </p>
       <DryingCalculator />
+      <NextSteps steps={NEXT["/tools/drying-calculator"]} />
     </div>
   );
 }

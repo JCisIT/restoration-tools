@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { DryingLogLoader } from "./loader";
 
 export const metadata: Metadata = {
@@ -15,6 +17,7 @@ export default function Page() {
         stopped dropping. It saves on this device only; nothing is sent anywhere.
       </p>
       <DryingLogLoader />
+      <NextSteps steps={NEXT["/tools/drying-log"]} />
     </div>
   );
 }

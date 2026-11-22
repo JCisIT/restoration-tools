@@ -2,80 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const tools = [
-  { href: "/tools/drying-calculator", name: "Drying calculator" },
-  { href: "/tools/drying-log", name: "Daily drying log" },
-  { href: "/tools/psychrometric-calculator", name: "GPP and dew point" },
-  { href: "/tools/air-scrubber-calculator", name: "Air scrubber calculator" },
-  { href: "/tools/demo-calculator", name: "Flood cut and demo quantities" },
-  { href: "/tools/equipment-billing", name: "Equipment days and billing" },
-];
-const estimateTool = { href: "/tools/estimate-compare", name: "Estimate comparison" };
-
-const guides = [
-  { href: "/equipment", name: "Equipment and care guide" },
-  { href: "/guides/water-category-class", name: "Water category and class" },
-  { href: "/forms", name: "Printable job forms" },
-  { href: "/resources", name: "Outside resources" },
-];
+import { ALL_GUIDES, TOOL, TOOL_GROUPS, type Entry } from "@/lib/links";
 
 const label = "pb-1.5 font-head text-xs font-semibold uppercase tracking-[0.26em] text-on-dark-muted";
-const item = "block rounded-xs px-3 py-2.5 text-bone hover:bg-forest";
+const item = "block rounded-xs px-3 py-2 text-bone hover:bg-forest";
 
 export function SidebarNav({ expertUrl, estimateReady }: { expertUrl: string | null; estimateReady: boolean }) {
   const pathname = usePathname();
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  const link = (e: Entry) => (
+    <Link key={e.href} href={e.href} aria-current={isActive(e.href) ? "page" : undefined} className={`${item} ${isActive(e.href) ? "bg-forest" : ""}`}>
+      {e.name}
+    </Link>
+  );
+
+  const groups = estimateReady
+    ? TOOL_GROUPS.map((g) => (g.label === "Job math" ? { ...g, items: [...g.items, TOOL.estimate] } : g))
+    : TOOL_GROUPS;
 
   return (
-    <div className="flex flex-col gap-7">
-      <nav aria-label="Tools" className="flex flex-col gap-1">
-        <span className={label}>Tools</span>
-        {(estimateReady ? [...tools, estimateTool] : tools).map((tool) => {
-          const active = pathname === tool.href;
-          return (
-            <Link
-              key={tool.href}
-              href={tool.href}
-              aria-current={active ? "page" : undefined}
-              className={`${item} ${active ? "bg-forest" : ""}`}
-            >
-              {tool.name}
-            </Link>
-          );
-        })}
-      </nav>
+    <div className="flex flex-col gap-6">
+      {groups.map((g) => (
+        <nav key={g.label} aria-label={`${g.label} tools`} className="flex flex-col gap-0.5">
+          <span className={label}>{g.label}</span>
+          {g.items.map(link)}
+        </nav>
+      ))}
 
-      <nav aria-label="Guides" className="flex flex-col gap-1">
+      <nav aria-label="Guides" className="flex flex-col gap-0.5">
         <span className={label}>Guides</span>
-        {guides.map((guide) => {
-          const active = pathname === guide.href || pathname.startsWith(`${guide.href}/`);
-          return (
-            <Link
-              key={guide.href}
-              href={guide.href}
-              aria-current={active ? "page" : undefined}
-              className={`${item} ${active ? "bg-forest" : ""}`}
-            >
-              {guide.name}
-            </Link>
-          );
-        })}
+        {ALL_GUIDES.map(link)}
       </nav>
 
       {!estimateReady && (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           <span className={label}>Coming soon</span>
-          <span className="px-3 py-2.5 text-on-dark-muted">{estimateTool.name}</span>
+          <span className="px-3 py-2 text-on-dark-muted">{TOOL.estimate.name}</span>
         </div>
       )}
 
       {expertUrl && (
-        <a
-          href={expertUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-xs bg-orange px-5 py-3 text-center text-sm font-semibold text-charcoal"
-        >
+        <a href={expertUrl} target="_blank" rel="noopener noreferrer" className="rounded-xs bg-orange px-5 py-3 text-center text-sm font-semibold text-charcoal">
           Talk to an expert
         </a>
       )}

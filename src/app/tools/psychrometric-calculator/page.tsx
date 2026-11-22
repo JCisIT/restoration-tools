@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { PsychroCalculator } from "./calculator";
 
 export const metadata: Metadata = {
@@ -16,6 +18,7 @@ export default function Page() {
         unaffected area, and check whether each dehumidifier is pulling water.
       </p>
       <PsychroCalculator />
+      <NextSteps steps={NEXT["/tools/psychrometric-calculator"]} />
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { EquipmentBilling } from "./billing";
 
 export const metadata: Metadata = {
@@ -15,6 +17,7 @@ export default function Page() {
         invoice. Add your own rates if you want totals. Nothing is saved or sent anywhere.
       </p>
       <EquipmentBilling />
+      <NextSteps steps={NEXT["/tools/equipment-billing"]} />
     </div>
   );
 }

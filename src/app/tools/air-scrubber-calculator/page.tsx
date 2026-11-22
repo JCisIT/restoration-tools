@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { AirScrubberCalculator } from "./calculator";
 
 export const metadata: Metadata = {
@@ -14,6 +16,7 @@ export default function Page() {
         Size air scrubbers and negative air machines for a room or containment by air changes per hour.
       </p>
       <AirScrubberCalculator />
+      <NextSteps steps={NEXT["/tools/air-scrubber-calculator"]} />
     </div>
   );
 }

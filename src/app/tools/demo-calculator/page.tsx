@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NEXT } from "@/lib/links";
+import { NextSteps } from "../../next-steps";
 import { DemoCalculator } from "./calculator";
 
 export const metadata: Metadata = {
@@ -15,6 +17,7 @@ export default function Page() {
         insulation and an approximate debris weight.
       </p>
       <DemoCalculator />
+      <NextSteps steps={NEXT["/tools/demo-calculator"]} />
     </div>
   );
 }
