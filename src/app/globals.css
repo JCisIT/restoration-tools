@@ -13,6 +13,7 @@
   --color-foreground: #0e0e0e;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
   --font-head: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
+  --font-display: var(--font-stencil), var(--font-oswald), sans-serif;
 }
 
 body {
@@ -22,12 +23,14 @@ body {
 }
 
 /* Brand headings: Oswald SemiBold, uppercase, lightly tracked. */
-h1,
-h2 {
-  font-family: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
 }
 
 :focus-visible {
@@ -58,5 +61,14 @@ h2 {
   header.bg-forest p,
   header.bg-forest svg {
     color: #0e0e0e !important;
+  }
+}
+
+@media print {
+  body:has(.print-form) footer {
+    display: none !important;
+  }
+  .print-form table {
+    min-width: 0 !important;
   }
 }

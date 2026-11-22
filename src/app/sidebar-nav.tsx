@@ -4,13 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const tools = [
-  { href: "/tools/drying-calculator", name: "Drying calculator", alsoActiveOn: "/" },
+  { href: "/tools/drying-calculator", name: "Drying calculator" },
   { href: "/tools/psychrometric-calculator", name: "GPP and dew point" },
   { href: "/tools/air-scrubber-calculator", name: "Air scrubber calculator" },
+  { href: "/tools/demo-calculator", name: "Flood cut and demo quantities" },
+  { href: "/tools/equipment-billing", name: "Equipment days and billing" },
   { href: "/tools/estimate-compare", name: "Estimate comparison" },
 ];
 
-const guides = [{ href: "/equipment", name: "Equipment and care guide" }];
+const guides = [
+  { href: "/equipment", name: "Equipment and care guide" },
+  { href: "/guides/water-category-class", name: "Water category and class" },
+  { href: "/forms", name: "Printable job forms" },
+];
 
 const comingSoon = ["Equipment care log", "Supplement request draft", "Photo-to-scope draft"];
 
@@ -44,7 +50,7 @@ export function SidebarNav({ expertUrl }: { expertUrl: string | null }) {
       <nav aria-label="Tools" className="flex flex-col gap-1">
         <span className={label}>Tools</span>
         {tools.map((tool) => {
-          const active = pathname === tool.href || pathname === tool.alsoActiveOn;
+          const active = pathname === tool.href;
           return (
             <Link
               key={tool.href}

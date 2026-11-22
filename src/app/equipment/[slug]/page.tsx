@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CADENCES, EQUIPMENT, getEquipment } from "@/lib/equipment";
 import { EquipmentIcon } from "../equipment-icon";
-import { PrintButton } from "./print-button";
+import { PrintButton } from "../../print-button";
 
 export function generateStaticParams() {
   return EQUIPMENT.map((e) => ({ slug: e.slug }));
@@ -39,7 +39,7 @@ export default async function EquipmentPage(props: PageProps<"/equipment/[slug]"
           <h1 className="text-3xl leading-tight md:text-4xl">{item.name}</h1>
           <p className="mt-3 max-w-2xl text-on-dark-muted">{item.whatItDoes}</p>
         </div>
-        <PrintButton />
+        <PrintButton className="border border-bone text-bone hover:bg-bone hover:text-charcoal" />
       </header>
 
       <section aria-labelledby="specs">

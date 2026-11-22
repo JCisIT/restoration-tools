@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inter, Oswald } from "next/font/google";
+import { Big_Shoulders_Stencil, Inter, Oswald } from "next/font/google";
 import { EXPERT_URL } from "@/lib/site";
 import { SidebarNav } from "./sidebar-nav";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const oswald = Oswald({ variable: "--font-oswald", subsets: ["latin"], weight: "600" });
+const stencil = Big_Shoulders_Stencil({ variable: "--font-stencil", subsets: ["latin"], weight: "900" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://restorationtools.org"),
@@ -25,7 +26,7 @@ function Brand() {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${oswald.variable} ${stencil.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col md:flex-row">
         {/* Phone: brand bar with a collapsible menu. */}
         <details className="on-dark bg-charcoal md:hidden">
